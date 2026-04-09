@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GymPortal.Infrastructure.Data.Configurations;
+namespace Infrastructure.Persistence.Configurations;
 
 public class GymClassConfiguration : IEntityTypeConfiguration<GymClass>
 {
