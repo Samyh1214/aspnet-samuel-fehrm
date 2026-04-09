@@ -1,41 +1,38 @@
+using Application;
+using Infrastructure;
 using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
+builder.Services.AddApplication(builder.Configuration, builder.Environment);
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseInMemoryDatabase("GymPortalDb"));
-}
-else
-{
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-}
+builder.Services.AddSession();
+builder.Services.AddControllersWithViews();
+builder.Services.AddRouting(x => x.LowercaseUrls = true);
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
+app.UseHsts();
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseStaticFiles();
 
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+await InfrastructureInitializer.InitializeAsync(app.Services);
 
 app.Run();
