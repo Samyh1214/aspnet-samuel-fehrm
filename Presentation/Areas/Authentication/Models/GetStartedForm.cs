@@ -1,0 +1,17 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Presentation.Areas.Authentication.Models;
+
+public class GetStartedForm
+{
+    [Required(ErrorMessage = "Email is required")]
+    [DataType(DataType.EmailAddress)]
+    [Display(Name = "Email Address", Prompt = "username@example.com")]
+    public string Email { get; set; } = null!;
+
+
+    [Range(typeof(bool), "true", "true", ErrorMessage = "Accepting the user terms & conditions is required")]
+    public bool TermsAndConditions { get; set; }
+
+    public string? ErrorMessage { get; set; }
+}
