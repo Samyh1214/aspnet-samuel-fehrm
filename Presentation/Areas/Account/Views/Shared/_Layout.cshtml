@@ -16,14 +16,15 @@
 </head>
 <body>
 
-    <div class="layout">
+    <div class="account-layout">
         <header>
             <partial name="Partials/Common/_HeaderSection" />
-            @await RenderSectionAsync("Hero", required: false)
         </header>
-        <main>
+
+        <partial name="Partials/Common/_PageTitleSection" />
+        <div class="container">
             @RenderBody()
-        </main>
+        </div>
         <footer>
             <partial name="Partials/Common/_FooterSection" />
         </footer>

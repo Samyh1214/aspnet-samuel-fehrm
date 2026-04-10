@@ -10,8 +10,16 @@ public static class PersistenceServiceCollectionExtensions
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        services.AddDbContext<PersistenceContext>(x =>
-            x.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
+        if (environment.IsDevelopment())
+        {
+            services.AddDbContext<PersistenceContext>(x =>
+                x.UseInMemoryDatabase("GymPortalDb"));
+        }
+        else
+        {
+            services.AddDbContext<PersistenceContext>(x =>
+                x.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
+        }
 
         return services;
     }

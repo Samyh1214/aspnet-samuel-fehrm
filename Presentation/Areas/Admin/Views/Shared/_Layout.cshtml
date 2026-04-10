@@ -1,6 +1,6 @@
 ﻿@{
     var pageTitle = ViewData["Title"]?.ToString();
-    var title = !string.IsNullOrWhiteSpace(pageTitle) ? $"{pageTitle} | CoreFitness" : "CoreFitness | Gym & Fitness Center";
+    var title = !string.IsNullOrWhiteSpace(pageTitle) ? $"{pageTitle} | Admin Center" : "Admin Center  | CoreFitness - Gym & Fitness Center";
 }
 
 <!DOCTYPE html>
@@ -16,17 +16,13 @@
 </head>
 <body>
 
-    <div class="layout">
+    <div class="admin-layout">
         <header>
             <partial name="Partials/Common/_HeaderSection" />
-            @await RenderSectionAsync("Hero", required: false)
         </header>
         <main>
             @RenderBody()
         </main>
-        <footer>
-            <partial name="Partials/Common/_FooterSection" />
-        </footer>
     </div>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
