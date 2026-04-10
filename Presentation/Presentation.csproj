@@ -12,10 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Account\" />
-    <Folder Include="Areas\Admin\" />
-    <Folder Include="Areas\Authentication\" />
-    <Folder Include="Views\Home\" />
+    <Folder Include="Areas\Account\Models\" />
+    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Models\" />
   </ItemGroup>
 
   <ItemGroup>
