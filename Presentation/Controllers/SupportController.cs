@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
 
-
-[Route("")]
-public class HomeController : Controller
+[Route("support")]
+public class SupportController : Controller
 {
     [HttpGet("")]
     [AllowAnonymous]
     public IActionResult Index()
     {
+        ViewData["Title"] = "Customer Service";
         return View();
     }
 }

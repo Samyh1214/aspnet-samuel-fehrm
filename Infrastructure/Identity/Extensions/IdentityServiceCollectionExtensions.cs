@@ -34,7 +34,7 @@ public static class IdentityServiceCollectionExtensions
         });
 
         services.AddScoped<IAuthService, IdentityAuthService>();
-        services.AddScoped<IUserService, IdentityAccountService>();
+        services.AddScoped<IAccountService, IdentityAccountService>();
 
         return services;
     }

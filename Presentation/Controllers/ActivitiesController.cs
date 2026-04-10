@@ -3,14 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
 
-
-[Route("")]
-public class HomeController : Controller
+[Route("activities")]
+[Authorize]
+public class ActivitiesController : Controller
 {
     [HttpGet("")]
-    [AllowAnonymous]
     public IActionResult Index()
     {
+        ViewData["Title"] = "Current Activities";
+
         return View();
     }
 }

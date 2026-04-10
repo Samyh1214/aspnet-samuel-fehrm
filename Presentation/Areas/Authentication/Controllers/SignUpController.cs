@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Presentation.Areas.Authentication.Models;
 
-namespace Presentation.WebApp.Areas.Authentication.Controllers;
+namespace Presentation.Areas.Authentication.Controllers;
 
 [Area("Authentication")]
 [Route("registration")]

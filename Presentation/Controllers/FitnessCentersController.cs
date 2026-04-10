@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
 
-
-[Route("")]
-public class HomeController : Controller
+[Route("fitness-centers")]
+public class FitnessCentersController : Controller
 {
     [HttpGet("")]
     [AllowAnonymous]
     public IActionResult Index()
     {
+        ViewData["Title"] = "Our Fitness Centers";
         return View();
     }
 }
