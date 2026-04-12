@@ -1,21 +1,39 @@
 ﻿using Application.Abstractions.Identity;
-using Application.Dtos.Identity;
-using Microsoft.AspNetCore.Identity;
+using Application.Dtos.Results;
 using GymPortal.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
+
 namespace Infrastructure.Identity.Services;
 
 public class IdentityAuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager) : IAuthService
 {
-    public async Task<AuthResult> AlreadyExistsAsync(string email)
+    public async Task<AuthResult> SignInUserAsync(string email, string password, bool rememberMe = false)
     {
-        var user = await userManager.FindByEmailAsync(email);
-        return user != null ? AuthResult.Failed("User already exists") : AuthResult.Ok();
-    }
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            return AuthResult.Failed("Incorrect email address or password");
 
+        var result = await signInManager.PasswordSignInAsync(email, password, rememberMe, false);
+        if (result.IsLockedOut)
+            return AuthResult.Failed("This user is temporary locked out");
+
+        if (result.IsNotAllowed)
+            return AuthResult.Failed("This user is not allowed to login");
+
+        if (result.RequiresTwoFactor)
+            return AuthResult.Failed("This user requires two-factor authentication");
+
+        if (!result.Succeeded)
+            return AuthResult.Failed("Incorrect email address or password");
+
+        return AuthResult.Ok();
+    }
     public async Task<AuthResult> SignUpUserAsync(string email, string password, string? roleName = null)
     {
-        var exists = await AlreadyExistsAsync(email);
-        if (!exists.Succeeded)
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            return AuthResult.Failed("Email and password are required");
+
+        var existingUser = await userManager.FindByEmailAsync(email);
+        if (existingUser != null)
             return AuthResult.Failed("User already exists");
 
         var user = ApplicationUser.Create(email);
@@ -28,27 +46,6 @@ public class IdentityAuthService(UserManager<ApplicationUser> userManager, SignI
         var role = roleName ?? "Member";
         if (await roleManager.RoleExistsAsync(role))
             await userManager.AddToRoleAsync(user, role);
-
-        return AuthResult.Ok();
-    }
-
-    public async Task<AuthResult> SignInUserAsync(string email, string password, bool rememberMe = false)
-    {
-        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
-            return AuthResult.InvalidCredentials();
-
-        var result = await signInManager.PasswordSignInAsync(email, password, rememberMe, false);
-        if (result.IsLockedOut)
-            return AuthResult.LockedOut();
-
-        if (result.IsNotAllowed)
-            return AuthResult.NotAllowed();
-
-        if (result.RequiresTwoFactor)
-            return AuthResult.RequireTwoFactorAuth();
-
-        if (!result.Succeeded)
-            return AuthResult.Failed();
 
         return AuthResult.Ok();
     }
