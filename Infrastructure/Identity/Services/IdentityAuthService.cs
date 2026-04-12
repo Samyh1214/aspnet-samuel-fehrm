@@ -6,14 +6,30 @@ namespace Infrastructure.Identity.Services;
 
 public class IdentityAuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager) : IAuthService
 {
-    public Task<AuthResult> AlreadyExistsAsync(string email)
+    public async Task<AuthResult> AlreadyExistsAsync(string email)
     {
-        throw new NotImplementedException();
+        var user = await userManager.FindByEmailAsync(email);
+        return user != null ? AuthResult.Failed("User already exists") : AuthResult.Ok();
     }
 
-    public Task<AuthResult> SignUpUserAsync(string email, string password, string? roleName = null)
+    public async Task<AuthResult> SignUpUserAsync(string email, string password, string? roleName = null)
     {
-        throw new NotImplementedException();
+        var exists = await AlreadyExistsAsync(email);
+        if (!exists.Succeeded)
+            return AuthResult.Failed("User already exists");
+
+        var user = ApplicationUser.Create(email);
+        user.EmailConfirmed = true;
+
+        var result = await userManager.CreateAsync(user, password);
+        if (!result.Succeeded)
+            return AuthResult.Failed(result.Errors.FirstOrDefault()?.Description);
+
+        var role = roleName ?? "Member";
+        if (await roleManager.RoleExistsAsync(role))
+            await userManager.AddToRoleAsync(user, role);
+
+        return AuthResult.Ok();
     }
 
     public async Task<AuthResult> SignInUserAsync(string email, string password, bool rememberMe = false)
