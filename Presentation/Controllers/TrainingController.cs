@@ -29,4 +29,10 @@ public class TrainingController : Controller
         ViewData["Title"] = "Online Coaching";
         return View();
     }
+    [HttpGet("")]
+    [AllowAnonymous]
+    public IActionResult Index()
+    {
+        return RedirectToAction(nameof(GroupTraining));
+    }
 }
