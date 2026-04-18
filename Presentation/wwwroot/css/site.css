@@ -1851,6 +1851,19 @@ form {
 .account-layout footer .container {
     display: block;
 }
+.profile-image {
+    width: 25.25rem;
+    height: 27.5rem;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+    .profile-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
 
 /* === MENU OPTIONS === */
 
@@ -1977,7 +1990,9 @@ form {
     }
 
     .profile-image {
-        display: none;
+        
+        margin-inline: auto;
+        
     }
 }
 

@@ -97,6 +97,17 @@ public class AccountController(IAuthService authService, IAccountService account
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (!string.IsNullOrWhiteSpace(userId))
         {
+            var account = await accountService.GetUserAccountAsync(userId);
+
+            if (account.Details?.ImageUrl != null &&
+                !account.Details.ImageUrl.Contains("profile-image-avatar"))
+            {
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(),
+                    "wwwroot", account.Details.ImageUrl.TrimStart('/'));
+                if (System.IO.File.Exists(imagePath))
+                    System.IO.File.Delete(imagePath);
+            }
+
             var deleted = await accountService.DeleteUserAccountAsync(userId);
             if (!deleted.Succeeded)
             {
