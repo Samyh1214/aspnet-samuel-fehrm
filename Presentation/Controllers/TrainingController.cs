@@ -33,6 +33,7 @@ public class TrainingController : Controller
     [AllowAnonymous]
     public IActionResult Index()
     {
-        return RedirectToAction(nameof(GroupTraining));
+        ViewData["Title"] = "Training";
+        return View();
     }
 }
