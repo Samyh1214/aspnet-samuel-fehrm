@@ -6,3 +6,11 @@
         mobileMenu?.classList.toggle('open');
     });
 });
+
+
+document.getElementById('profileImage')?.addEventListener('change', function () {
+    const placeholder = document.querySelector('.file-input-placeholder');
+    if (placeholder) {
+        placeholder.textContent = this.files[0]?.name ?? 'Upload Profile Image';
+    }
+});

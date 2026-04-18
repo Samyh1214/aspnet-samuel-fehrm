@@ -14,6 +14,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\svg\" />
     <Folder Include="wwwroot\uploads\" />
+    <Folder Include="wwwroot\uploads\profiles\" />
   </ItemGroup>
 
   <ItemGroup>
