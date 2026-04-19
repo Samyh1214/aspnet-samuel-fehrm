@@ -4,12 +4,12 @@ namespace Presentation.Areas.Authentication.Models;
 
 public class SignInForm
 {
-    [Required]
+    [Required(ErrorMessage = "Email is required")]
     [DataType(DataType.EmailAddress)]
     [Display(Name = "Email Address", Prompt = "username@example.com")]
     public string Email { get; set; } = null!;
 
-    [Required]
+    [Required(ErrorMessage = "Password is required")]
     [DataType(DataType.Password)]
     [Display(Name = "Password", Prompt = "Enter Password")]
     public string Password { get; set; } = null!;

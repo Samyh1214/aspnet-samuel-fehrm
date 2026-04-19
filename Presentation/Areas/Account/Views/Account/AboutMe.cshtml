@@ -1,0 +1,105 @@
+﻿@using Presentation.Areas.Account.Models
+@model AboutMeViewModel
+@{
+    ViewData["Title"] = "My Account";
+}
+
+<aside>
+    <div class="profile-image">
+        <img src="@Url.Content(Model.ProfileImageUrl ?? "/images/profile-image-avatar.png")" alt="Profile Image" />
+    </div>
+    <nav class="menu-options">
+        <ul>
+            <li>Menu Options</li>
+            <li><a asp-area="Account" asp-controller="Account" asp-action="AboutMe" class="active">About Me</a></li>
+            <hr />
+            <li><a asp-area="Account" asp-controller="Account" asp-action="Index">My Membership</a></li>
+            <hr />
+            <li><a asp-area="Account" asp-controller="Account" asp-action="Index">My Bookings</a></li>
+            <hr />
+            <li><a asp-area="Account" asp-controller="Account" asp-action="SignOut">Sign Out</a></li>
+        </ul>
+    </nav>
+    <div class="remove-account">
+        <p>If you like to cancel your account click below</p>
+        <a asp-area="Account" asp-controller="Account" asp-action="RemoveAccount">Remove Account</a>
+    </div>
+</aside>
+
+<main>
+    <section class="about-me">
+        <div class="title">
+            <h3>About Me</h3>
+            <hr />
+        </div>
+        <form id="aboutMeForm" method="post" enctype="multipart/form-data" asp-area="Account" asp-controller="Account" asp-action="AboutMe" novalidate>
+            <div data-type="firstname" class="form-group">
+                <label class="form-label" asp-for="AboutMeForm.FirstName"></label>
+                <input class="form-input" asp-for="AboutMeForm.FirstName" />
+                <span class="field-validation" asp-validation-for="AboutMeForm.FirstName"></span>
+            </div>
+            <div data-type="lastname" class="form-group">
+                <label class="form-label" asp-for="AboutMeForm.LastName"></label>
+                <input class="form-input" asp-for="AboutMeForm.LastName" />
+                <span class="field-validation" asp-validation-for="AboutMeForm.LastName"></span>
+            </div>
+            <div data-type="email" class="form-group">
+                <label class="form-label" asp-for="AboutMeForm.Email"></label>
+                <input class="form-input" asp-for="AboutMeForm.Email" readonly />
+                <span class="field-validation" asp-validation-for="AboutMeForm.Email"></span>
+            </div>
+            <div data-type="phone" class="form-group">
+                <label class="form-label" asp-for="AboutMeForm.PhoneNumber"></label>
+                <input class="form-input" asp-for="AboutMeForm.PhoneNumber" />
+                <span class="field-validation" asp-validation-for="AboutMeForm.PhoneNumber"></span>
+            </div>
+            <hr />
+            <div data-type="file" class="form-group">
+                <label class="form-label" asp-for="AboutMeForm.ProfileImage"></label>
+                <div class="file-input-wrapper">
+                    <span class="file-input-placeholder">Upload Profile Image</span>
+                    <input class="form-input" asp-for="AboutMeForm.ProfileImage" id="profileImage" style="display:none;" />
+                    <label for="profileImage" class="file-input-browse btn">Browse</label>
+                </div>
+            </div>
+            <div data-type="submit" class="form-group">
+                <button class="btn" type="submit">Save</button>
+            </div>
+            <div asp-validation-summary="ModelOnly"></div>
+            @Html.AntiForgeryToken()
+        </form>
+    </section>
+
+    <section class="my-statistics">
+        <h2>My Statistics</h2>
+        <div class="my-statistics__container">
+            <div class="statistics-item">
+                <div class="statistics-item__header">
+                    <span>Check-In (last 30 days)</span>
+                    <span>25</span>
+                </div>
+                <div class="statistics-item__bar">
+                    <div class="statistics-item__fill" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="statistics-item">
+                <div class="statistics-item__header">
+                    <span>Weight Goal</span>
+                    <span>50%</span>
+                </div>
+                <div class="statistics-item__bar">
+                    <div class="statistics-item__fill" style="width: 50%"></div>
+                </div>
+            </div>
+            <div class="statistics-item">
+                <div class="statistics-item__header">
+                    <span>Current BMI</span>
+                    <span>27</span>
+                </div>
+                <div class="statistics-item__bar">
+                    <div class="statistics-item__fill" style="width: 70%"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

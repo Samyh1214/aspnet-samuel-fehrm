@@ -1,48 +1,67 @@
 ﻿using Application.Abstractions.Identity;
 using Application.Dtos.Identity;
-using Microsoft.AspNetCore.Identity;
+using Application.Dtos.Results;
 using GymPortal.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
+
 namespace Infrastructure.Identity.Services;
 
-public class IdentityAccountService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager) : IUserService
+public class IdentityAccountService(UserManager<ApplicationUser> userManager) : IAccountService
 {
-    public async Task<UserResult> GetUserDetailsAsync(string userId)
+    public async Task<AccountResult> GetUserAccountAsync(string userId)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(userId);
+        {
+            if (string.IsNullOrWhiteSpace(userId))
+                throw new ArgumentNullException(nameof(userId));
 
-        var user = await userManager.FindByIdAsync(userId);
-        if (user is null)
-            return UserResult.NotFound();
+            var user = await userManager.FindByIdAsync(userId);
+            if (user is null)
+                return AccountResult.NotFound();
 
-        var userDetails = new UserDetails
-        (
-            user.Id,
-            user.Email,
-            user.FirstName,
-            user.LastName,
-            user.PhoneNumber,
-            user.ImageUrl
-        );
+            var details = new AccountDetails(
+                user.Id,
+                user.Email,
+                user.FirstName,
+                user.LastName,
+                user.PhoneNumber,
+                user.ImageUrl
+            );
 
-        return UserResult.Ok(user.Id, userDetails);
+            return AccountResult.Ok(details);
+        }
     }
 
-    public async Task<UserResult> UpdateUserDetailsAsync(UserDetails userDetails)
+    public async Task<AccountResult> UpdateUserAccountDetailsAsync(UpdateAccountDetails details)
     {
-        ArgumentNullException.ThrowIfNull(userDetails);
+        ArgumentNullException.ThrowIfNull(details);
 
-        var user = await userManager.FindByIdAsync(userDetails.UserId);
+        var user = await userManager.FindByIdAsync(details.UserId);
         if (user is null)
-            return UserResult.NotFound();
+            return AccountResult.NotFound();
 
-        user.FirstName = userDetails.FirstName;
-        user.LastName = userDetails.LastName;
-        user.PhoneNumber = userDetails.PhoneNumber;
-        user.ImageUrl = userDetails.ImageUrl;
+        user.FirstName = details.FirstName;
+        user.LastName = details.LastName;
+        user.PhoneNumber = details.PhoneNumber;
+        user.ImageUrl = details.ImageUrl;
 
         var result = await userManager.UpdateAsync(user);
         return result.Succeeded
-            ? UserResult.Ok()
-            : UserResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Unable to save changes");
+            ? AccountResult.Ok()
+            : AccountResult.Failed(result.Errors.FirstOrDefault()?.Description ?? "Unable to save changes");
+    }
+
+    public async Task<AccountResult> DeleteUserAccountAsync(string userId)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+            throw new ArgumentNullException(nameof(userId));
+
+        var user = await userManager.FindByIdAsync(userId);
+        if (user is null)
+            return AccountResult.NotFound();
+
+        var deleted = await userManager.DeleteAsync(user);
+        return deleted.Succeeded
+            ? AccountResult.Ok()
+            : AccountResult.Failed(deleted.Errors.FirstOrDefault()?.Description ?? "Unable to delete account");
     }
 }
