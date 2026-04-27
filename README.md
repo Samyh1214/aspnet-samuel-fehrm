@@ -1,7 +1,7 @@
 # GymPortal – ASP.NET Core MVC
 
 ## Om projektet
-GymPortal är en webbportal för ett gym byggd med ASP.NET Core MVC. Projektet demonstrerar en fullstack-implementation med fokus på ren arkitektur, säkerhet och skalbarhet från databasmodellering till presentation.
+GymPortal är en webbportal för ett gym byggd med ASP.NET Core MVC. UI:t är designat att efterlikna en färdig design från Figma. Projektet demonstrerar en fullstack-implementation med fokus på ren arkitektur, säkerhet och skalbarhet från databasmodellering till presentation.
 
 Projektet följer principerna för Clean Architecture och Domain-Driven Design (DDD) med tydlig separation mellan domän, applikation, infrastruktur och presentation. Grunden är lagd för vidare utveckling av membership-hantering, gymklasser och bokning.
 
